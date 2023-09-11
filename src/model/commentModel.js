@@ -1,6 +1,6 @@
 const mongoose = require("mongoose") //importing mongoose 
 
-const commentSchema = new mongoose.Schema({ //creting a Schema for blog model
+const commentSchema = new mongoose.Schema({ //creating a Schema for comment model
    
 
     body:{

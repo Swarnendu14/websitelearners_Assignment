@@ -138,8 +138,9 @@ next();
 }
 }
 
-const updateBlogData = async (req, res, next) => {
-    const {title, body} = req.body;
+const updateBlogData =  (req, res, next) => {
+  try{
+      const {title, body} = req.body;
 
     if(!isValid(title))
     return res.status(400).send({status: false, message: "title is missing"}); 
@@ -147,11 +148,94 @@ const updateBlogData = async (req, res, next) => {
     return res.status(400).send({status: false, message: "body is missing"}); 
 
     next();
+  }
+  catch(error){
+    return res.status(500).send({ status: false, message: error.message }); 
+}
 
 }
+
+const commentValid = async(req,res,next) => {
+   try{
+     const {body, userId, blogId} = req.body;
+    if(!isValid(body))
+    return res.status(400).send({ status: false, message: "Please write something in comment" });
+    if (!isValid(userId))
+    return res.status(400).send({ status: false, message: "Please enter user Id" });
+    if (!(/^[0-9a-f]{24}$/.test(userId)))
+    return res.status(400).send({ status: false, message: "Please enter valid user Id" });
+    const existsUser = await userModel.findOne({_id : userId});
+    if(!existsUser)
+    return res.status(400).send({ status: false, message: "user not exists" });
+
+    if (!isValid(blogId))
+    return res.status(400).send({ status: false, message: "Please enter user Id" });
+    if (!(/^[0-9a-f]{24}$/.test(blogId)))
+    return res.status(400).send({ status: false, message: "Please enter valid blog Id" });
+    const existsblog = await blogModel.findOne({_id : blogId});
+    if(!existsblog)
+    return res.status(400).send({ status: false, message: "blog not exists" });
+
+    next();
+   }
+   catch(error){
+    return res.status(500).send({ status: false, message: error.message }); 
+}
+}
+
+const updateCommentsData = (req,res,next) => {
+   try{
+    const body = req.body.body;
+    if(!isValid(body))
+    return res.status(400).send({ status: false, message: "Please write something in comment" });
+    next();
+   }
+   catch(error){
+    return res.status(500).send({ status: false, message: error.message }); 
+}
+}
+
+
+const verifyBlogId = async (req, res,next) => {
+    try{
+     const blogId = req.body.blogId;
+     if (!isValid(blogId))
+     return res.status(400).send({ status: false, message: "Please enter blog Id" });
+     if (!(/^[0-9a-f]{24}$/.test(blogId)))
+     return res.status(400).send({ status: false, message: "Please enter valid blog Id" });
+     const existsblog = await blogModel.findOne({_id : blogId});
+     if(!existsblog)
+     return res.status(400).send({ status: false, message: "blog not exists" });
+ next();
+    }
+    catch(error){
+     return res.status(500).send({ status: false, message: error.message }); 
+ }
+ }
+
+ const commentId = async (req, res, next) => {
+    try{
+        const commentId = req.body.commentId;
+        if (!isValid(commentId))
+        return res.status(400).send({ status: false, message: "Please enter comment Id" });
+        if (!(/^[0-9a-f]{24}$/.test(commentId)))
+        return res.status(400).send({ status: false, message: "Please enter valid comment Id" });
+        const existsComment = await commentModel.findOne({_id : commentId});
+        if(!existsComment)
+        return res.status(400).send({ status: false, message: "comment not exists" });
+    next();
+       }
+       catch(error){
+        return res.status(500).send({ status: false, message: error.message }); 
+    }
+ }
 
 module.exports.regValid = regValid;
 module.exports.logInValid = logInValid;
 module.exports.blogValid = blogValid;
 module.exports.verifyId = verifyId;
 module.exports.updateBlogData = updateBlogData;
+module.exports.commentValid = commentValid;
+module.exports.verifyBlogId = verifyBlogId;
+module.exports.commentId = commentId;
+module.exports.updateCommentsData = updateCommentsData;
