@@ -15,6 +15,3 @@ All the data should be stored in a database of your choice. However, we’d like
 5. Documentation:
 Please provide clear documentation of your API endpoints, including the necessary HTTP methods, headers, and data structures for request and response bodies.
 Your main focus should be on the back-end side, so a front-end user interface isn’t required. However, please make sure your API is properly structured, secure, and ready to interact with a potential front-end.
-
-
-You can use the programming language you feel most comfortable with, but keep in mind that we mostly use Python and Node.js in our tech stack.
